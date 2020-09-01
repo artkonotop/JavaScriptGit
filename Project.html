@@ -1,0 +1,129 @@
+<!-- 
+Принять от пользователя имена людей для набора в команду. Имена принять и сохранить в новом массиве. Количество имён должно соответсвовать количеству должностей. Массив с 
+должностями - ['Junior developer', 'Middle developer', 'Senior developer', 'Junior QA', 'Middle QA', 'Senior QA', 'Project manager'].
+Создать объект team в котором будут храниться новые объекты-сотрудники с параметрами name и position, данные для этих свойств добавляем из массивов.
+Добавить сотрудникам зарплаты (свойство salary) при помощи метода Math.random(), который будет выдавать произвольное число в промежутке между N1 и N2 исходя из принципа:
+если в должности есть слово "junior" сумма будет от 500 до 1000;
+если в должности есть слово "middle" сумма будет от 1500 до 2000;
+если в должности есть слово "senior" сумма будет от 2500 до 3000;
+для всех остальных - от 4000 до 4500; Для определения того есть ли слово в имени должности используйте метод str.indexOf('часть строки для поиска'). Например:
+   var name = 'Junior developer';
+   name.indexOf('Junior'); 
+   //в данном случае вернет 0, если такая строка отсутсвует вернет -1. 
+   //Регистр имеет значение, по этому строка "junior" вернет -1
+Добавить каждому сотруднику метод tellAboutYourSelf(), который будет сообщать информацию о пользователе (например "Меня зовут John и я - Project manager. Я зарабатываю 4863$.").
+Добавить объекту team метод showTeam(), который будет выводить информацию о всех сотрудниках в консоль в формате: "John - Project manager. Зарплата - 4863$."*
+Для удобства создайте по порядку все необходимые функции и в конце сделать вызов этих функций в логическом порядке. Например:
+
+getNames();
+createTeam();
+setSalary();
+создание цикла для установки метода tellAboutYourSelf();
+*создание team.showTeam() = function() {...};
+*вызов метода showTeam();
+-->
+     <!DOCTYPE html>
+     <html xmlns="http://www.w3.org/1999/xhtml">
+     <head>
+        <title></title>
+        <script type="text/javascript">
+
+              var vExit = false; 
+
+              function getNames() {
+                ArrayOfPosition = ['Junior developer', 'Middle developer', 'Senior developer', 'Junior QA', 'Middle QA', 'Senior QA', 'Project manager'];  
+                ArrayOfNames = [];  
+
+                ArrayOfNames.length = ArrayOfPosition.length;
+                var i = 0;
+                while (i < ArrayOfNames.length && !vExit) {   
+                  ArrayOfNames[i] = prompt('Ведите имя для должности - ' + ArrayOfPosition[i] + '!'); 
+                  if (ArrayOfNames[i] == null) {
+                    vExit = true;
+                  } else if (ArrayOfNames[i] === '' ) {
+                    while (ArrayOfNames[i] === '') {                          
+                       ArrayOfNames[i] = prompt('Имя не может быть пустым! Еще раз ведите имя для должности - ' + ArrayOfPosition[i] + '!'); 
+                    };                     
+                  };
+                  i++; 
+                };
+              };     
+
+              function createTeam() {
+
+                     Employee = {
+                                 name: '',
+                             position: ''
+                     };    
+
+                     Team = {
+                       ArrayOfEmploye: []                    
+                     };    
+
+                 for (i = 0; i < ArrayOfNames.length; i++) {                           
+                    Team.ArrayOfEmploye[i] = Object.assign({},Employee);
+                    Team.ArrayOfEmploye[i].name = ArrayOfNames[i];
+                    Team.ArrayOfEmploye[i].position = ArrayOfPosition[i];
+                 };
+
+              }; 
+
+              function setSalary() {
+                    function getRandomBetween(min, max) {
+                       min = Math.ceil(min);
+                       max = Math.floor(max);
+                       return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
+                    };
+
+                    for (i = 0; i < ArrayOfNames.length; i++) {  
+                       if (Team.ArrayOfEmploye[i].position.toLowerCase().indexOf('junior') >= 0 ) {
+                         Team.ArrayOfEmploye[i].salary = getRandomBetween(500, 1000);
+                       } else if (Team.ArrayOfEmploye[i].position.toLowerCase().indexOf('middle') >= 0) {
+                         Team.ArrayOfEmploye[i].salary = getRandomBetween(1500, 2000);  
+                       } else if (Team.ArrayOfEmploye[i].position.toLowerCase().indexOf('senior') >= 0) {
+                         Team.ArrayOfEmploye[i].salary = getRandomBetween(2500, 3000);  
+                       } else {
+                         Team.ArrayOfEmploye[i].salary = getRandomBetween(4000, 4500);  
+                       };        
+                    };   
+              };
+
+              function tellAbout() {
+                    
+                    Employee.tellAboutYourSelf = function() {
+                                                      document.write('Меня зовут ' + this.name + ' и я - ' + this.position +'. Я зарабатываю ' + this.salary + '$.<br>');     
+                                                 };
+
+                    for (i = 0; i < ArrayOfNames.length; i++) {  
+                       Team.ArrayOfEmploye[i].tellAboutYourSelf = Employee.tellAboutYourSelf;
+                       Team.ArrayOfEmploye[i].tellAboutYourSelf();                       
+                    };   
+              };              
+
+              function createShowTeam() {
+                    
+                    Employee.showTeam = function() {
+                                                     console.log(this.position +'. Зарплата - ' + this.salary + '$.');     
+                                                   };
+
+                    for (i = 0; i < ArrayOfNames.length; i++) {  
+                       Team.ArrayOfEmploye[i].showTeam = Employee.showTeam;
+                       Team.ArrayOfEmploye[i].showTeam();                       
+                    };   
+              };
+
+              getNames();
+              /*Выход из программы в случае отмены*/
+              if (!vExit) {
+                createTeam();
+                setSalary();
+                tellAbout();
+                createShowTeam();
+              }  
+
+         </script>
+     </head>
+     <body>
+     </body>
+     </html>
+     
